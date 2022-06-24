@@ -1,0 +1,237 @@
+{{!-- <!DOCTYPE html> --}}
+{{!-- <html> --}}
+    {{!-- <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <title>Notes App</title> --}}
+        <link rel="stylesheet" href="notes style.css">
+        <link rel="icon" href="favicon notes.ico">
+         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" />
+    {{!-- </head>
+    <body> --}}
+        
+       
+        <div class="main" style="background-color:antiquewhite;">
+             <h1>{{viewTitle}}📝</h1>
+            <form  autocomplete="off" action="/student" method="POST" target="_blank">   
+             <input type="hidden" name="_id" value="{{student._id}}"> 
+               <div class="form-group">     
+                <b><label for="name">Enter your Name</label></b><br>
+                <input type="text" class="form-control" name="name" value="{{student.name}}" required>
+                <div class="text-danger">
+                      {{student.nameError}}
+                </div>
+                </div> 
+                <br>
+                <div class="form-group">
+               <b><label for="email">Enter your Email</label></b><br>
+                <input type="email" name ="email" class="form-control" value="{{student.email}}" required>
+                <div class="text-danger">
+                    {{student.emailError}}
+                </div>
+                
+                 </div>
+                 <div class="middle">
+         <h2 class="text-center mt-5">
+           Voice to text Converter
+            </h2>
+           
+        
+
+       <br>
+       <span id="instructions"></span>
+       <div class="form-group"  >
+       <textarea class="form-control" id="textarea" cols="50" rows="6" name="textarea" value={{student.textarea}}  required></textarea>
+       <br />
+     <br />
+       </div>
+        <button type="submit" class="btn btn-info mx-3" style="float: right;"><i class="fa fa-database" ></i> Submit</button>
+       
+       
+          {{!-- <a class="btn btn-success btn-block mx-3 my-3" href="/student/list" onClick="myalert()" style="width: 20%"> Save Note</a>
+         --}}
+         </form>
+     
+        </div>
+                <div class="form-group">
+                    <button id="start" class="btn btn-danger btn-block mx-3 my-3" style="width: 20%">
+         Start Recording
+       </button>
+
+       <button id="clear" class="btn btn-primary btn-block" style="width: 20%">
+         Clear Text
+       </button>
+
+              
+
+              {{!-- <a class="btn btn-secondary" href="/student/note"><i class="fa fa-list-alt"></i> Submit real</a> --}}
+                <a class="btn btn-secondary mx-3" href="/student/list"><i class="fa fa-list-alt"></i> View All</a>
+                </div>
+
+               
+
+ {{!-- <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Speech to text converter</title>
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" />
+     
+ </head>
+   <body> --}}
+     
+       {{!-- <br> --}}
+      
+    
+      
+     
+     
+ {{!-- </body> --}}
+
+   
+   <script> function myalert(){
+          alert("your note has been saved successfully!Click ok to see")
+        
+        
+   };
+   
+   </script>
+   <script>
+    var SpeechRecognition = window.webkitSpeechRecognition;
+
+var recognition = new SpeechRecognition();
+let saveHandle
+
+var Textbox = $("#textarea");
+var instructions = $("#instructions");
+
+var Content = "";
+
+recognition.continuous = true;
+
+recognition.onresult = function (event) {
+  var current = event.resultIndex;
+
+  var transcript = event.results[current][0].transcript;
+
+  Content += transcript;
+  Textbox.val(Content);
+};
+
+$("#start").on("click", function (e) {
+  if ($(this).text() == "Stop Recording") {
+    $(this).html("Start Recording");
+    $("#instructions").html("");
+    recognition.stop();
+  } else {
+    $(this).html("Stop Recording");
+    $("#instructions").html("Voice Recognition is on");
+    if (Content.length) {
+      Content += " ";
+    }
+    recognition.start();
+  }
+});
+
+
+async function getNewFileHandle() {
+  
+  const handle = await window.chooseFileSystemEntries();
+  return handle;
+}
+async function loadFile() {
+
+  saveHandle = await getNewFileHandle()
+
+  if(await verifyPermission(saveHandle,true)){
+ 
+  // Request permission, if the user grants permission, return true.
+    const file = await saveHandle.getFile();
+    const contents = await file.text();
+    console.log(contents);
+    Content += contents;
+    $("textarea").val(contents);
+  }}
+
+  async function saveFile(saveHandle,content){
+    const writable = await saveHandle.createWritable();
+    // Write the contents of the file to the stream.
+    await writable.write(content);
+    // Close the file and write the contents to disk.
+    await writable.close();
+
+    alert("File Changes were Saved")
+  }
+
+  async function verifyPermission(fileHandle, withWrite) {
+    const opts = {};
+    if (withWrite) {
+      opts.writable = true;
+    }
+    // Check if we already have permission, if so, return true.
+    if (await fileHandle.queryPermission(opts) === 'granted') {
+      return true;
+    }
+    // Request permission to the file, if the user grants permission, return true.
+    if (await fileHandle.requestPermission(opts) === 'granted') {
+      return true;
+    }
+    // The user did nt grant permission, return false.
+    return false;
+  }
+
+ $("#clear").click(function () {
+   Textbox.val("");
+  
+  $("#start").html("Start Recording")
+});
+
+Textbox.on("input", function () {
+  Content = $(this).val();
+});
+</script>
+
+
+
+ 
+
+           
+      
+    {{!-- </body>
+</html> --}}
+
+
+{{!-- <h3>{{viewTitle}}</h3>
+
+<form action="/employee" method="POST" autocomplete="off">
+    <input type="hidden" name="_id" value="{{employee._id}}">
+    <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" class="form-control" name="fullName" placeholder="Full Name" value="{{employee.fullName}}">
+        <div class="text-danger">
+            {{employee.fullNameError}}</div>
+    </div>
+    <div class="form-group">
+        <label>Email</label>
+        <input type="text" class="form-control" name="email" placeholder="Email" value="{{employee.email}}">
+        <div class="text-danger">
+            {{employee.emailError}}</div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Mobile</label>
+            <input type="text" class="form-control" name="mobile" placeholder="Mobile" value="{{employee.mobile}}">
+        </div>
+        <div class="form-group col-md-6">
+            <label>City</label>
+            <input type="text" class="form-control" name="city" placeholder="City" value="{{employee.city}}">
+        </div>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-info"><i class="fa fa-database"></i> Submit</button>
+        <a class="btn btn-secondary" href="/employee/list"><i class="fa fa-list-alt"></i> View All</a>
+    </div>
+</form> --}}
+
